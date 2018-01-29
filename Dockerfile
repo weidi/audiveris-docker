@@ -1,6 +1,6 @@
+FROM debian as builder
 LABEL version="0.3"
 
-FROM debian as builder
 RUN apt-get update && apt-get install gradle \
         default-jdk \
         git \

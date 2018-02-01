@@ -18,6 +18,7 @@ RUN apt-get update && apt-get install --no-install-recommends \
         tesseract-ocr-deu \
         tesseract-ocr-fra \
         openjdk-8-jre-headless -y && tar -xvf Audiveris.tar && \
-        rm /etc/java-8-openjdk/accessibility.properties
+        rm /etc/java-8-openjdk/accessibility.properties && \
+        rm Audiveris.tar
 
 CMD ["sh", "-c", "/Audiveris/bin/Audiveris -batch -export -output /output /input/*.pdf"]

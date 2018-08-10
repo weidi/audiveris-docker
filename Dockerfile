@@ -4,9 +4,9 @@ RUN apt-get update && apt-get install gradle \
         git \
         tesseract-ocr -y
 
-RUN git clone https://github.com/Audiveris/audiveris.git && \
+RUN git clone --branch development https://github.com/Audiveris/audiveris.git && \
         cd audiveris && \
-        gradle clean build -x test && \
+        ./gradlew build && \
         mkdir /Audiveris && \
         tar -xvf /audiveris/build/distributions/Audiveris.tar -C /Audiveris && \
         cd /Audiveris/Audiveris/lib/ && \

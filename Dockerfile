@@ -16,7 +16,7 @@ RUN apk update && apk add openjdk11-jre \
         tesseract-ocr \
         tesseract-ocr-data-deu \
         tesseract-ocr-data-fra \
-		ttf-dejavu \
+		font-bh-ttf \
 		libuuid && \
 		ln -s /usr/lib/libfontconfig.so.1 /usr/lib/libfontconfig.so && \
 		ln -s /lib/libuuid.so.1 /usr/lib/libuuid.so.1 && \

@@ -22,4 +22,6 @@ RUN apk update && apk add openjdk11-jre \
 		ln -s /lib/libuuid.so.1 /usr/lib/libuuid.so.1 && \
 		ln -s /lib/libc.musl-x86_64.so.1 /usr/lib/libc.musl-x86_64.so.1
 ENV LD_LIBRARY_PATH /usr/lib
-CMD ["sh", "-c", "/Audiveris/bin/Audiveris -batch -export -output /output /input/*.pdf"]
+CMD ["sh", "-c", "/Audiveris/bin/Audiveris -batch -export -output /output/jpg /input/*.jpg"]
+CMD ["sh", "-c", "/Audiveris/bin/Audiveris -batch -export -output /output/png /input/*.png"]
+CMD ["sh", "-c", "/Audiveris/bin/Audiveris -batch -export -output /output/pdf /input/*.pdf"]

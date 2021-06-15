@@ -1,0 +1,9 @@
+version: "3.7"
+
+services:
+    audiveris:
+        image: s0urc10ud/audiveris-docker-images
+        container_name: audiveris-converter
+        volumes:
+            -  "$PWD/input:/input/"
+            -  "$PWD/output:/output/"

@@ -1,18 +1,19 @@
 FROM alpine as builder
-RUN apk update && apk add openjdk11 \
+RUN apk add --no-cache openjdk17 \
         git \
         tesseract-ocr  \
 		ttf-dejavu \
 		tar
-RUN git clone --branch master https://github.com/Audiveris/audiveris.git && \
+RUN git clone --branch development https://github.com/Audiveris/audiveris.git && \
         cd audiveris && \
         ./gradlew build && \
-		mkdir /Audiveris && \
-        tar -xvf /audiveris/build/distributions/Audiveris.tar -C /Audiveris 
+		mkdir /audiveris-extract && \
+        tar -xvf /audiveris/build/distributions/Audiveris*.tar -C /audiveris-extract && \
+		mv /audiveris-extract/Audiveris*/* /audiveris-extract/
 
 FROM alpine 
-COPY --from=builder /Audiveris/ /
-RUN apk update && apk add openjdk11-jre \
+COPY --from=builder /audiveris-extract /audiveris-extract
+RUN apk add --no-cache openjdk17-jre \
         tesseract-ocr \
         tesseract-ocr-data-deu \
         tesseract-ocr-data-fra \
@@ -22,6 +23,6 @@ RUN apk update && apk add openjdk11-jre \
 		ln -s /lib/libuuid.so.1 /usr/lib/libuuid.so.1 && \
 		ln -s /lib/libc.musl-x86_64.so.1 /usr/lib/libc.musl-x86_64.so.1
 ENV LD_LIBRARY_PATH /usr/lib
-CMD ["sh", "-c", "/Audiveris/bin/Audiveris -batch -export -output /output/jpg /input/*.jpg"]
-CMD ["sh", "-c", "/Audiveris/bin/Audiveris -batch -export -output /output/png /input/*.png"]
-CMD ["sh", "-c", "/Audiveris/bin/Audiveris -batch -export -output /output/pdf /input/*.pdf"]
+CMD ["sh", "-c", "/audiveris-extract/bin/Audiveris -batch -export -output /output/jpg /input/*.jpg"]
+CMD ["sh", "-c", "/audiveris-extract/bin/Audiveris -batch -export -output /output/png /input/*.png"]
+CMD ["sh", "-c", "/audiveris-extract/bin/Audiveris -batch -export -output /output/pdf /input/*.pdf"]

@@ -1,8 +1,8 @@
 # audiveris-docker-images
 
-This container will convert all images in jpg or png (originally forked repo: PDF) to mxl (MusicXML) so you can further edit it with tools like MuseScore.
+This container will convert all jpg, png and pdf to mxl (MusicXML) so you can further edit it with tools like MuseScore.
 
-All *.pdf in `/path/to/input` will be converted and saved to `/path/to/output`
+All *.pdf, *.jpg and *.png in `/path/to/input` will be converted and saved to `/path/to/output`
 
 Usage
 -------------

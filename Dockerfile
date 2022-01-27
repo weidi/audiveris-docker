@@ -1,28 +1,24 @@
-FROM alpine as builder
-RUN apk update && apk add openjdk11 \
-        git \
-        tesseract-ocr  \
-        ttf-dejavu \
-        tar
-RUN git clone --branch master https://github.com/Audiveris/audiveris.git && \
+FROM debian:stretch
+
+RUN apt-get update && apt-get install -y  \
+        curl wget \
+        git tesseract-ocr \
+        tesseract-ocr-eng \
+        tesseract-ocr-deu \
+        tesseract-ocr-fra
+
+RUN wget https://download.oracle.com/java/17/latest/jdk-17_linux-x64_bin.deb \
+        && apt install -y ./jdk-17_linux-x64_bin.deb \
+        && rm ./jdk-17_linux-x64_bin.deb
+
+ENV JAVA_HOME=/usr/lib/jvm/jdk-17/ 
+ENV PATH=$PATH:$JAVA_HOME/bin 
+
+RUN  git clone --branch development https://github.com/Audiveris/audiveris.git && \
         cd audiveris && \
         ./gradlew build && \
         mkdir /audiveris-extract && \
         tar -xvf /audiveris/build/distributions/Audiveris*.tar -C /audiveris-extract && \
         mv /audiveris-extract/Audiveris*/* /audiveris-extract/
 
-FROM alpine 
-COPY --from=builder /audiveris-extract /audiveris-extract
-RUN apk update && apk add openjdk11-jre \
-        tesseract-ocr \
-        tesseract-ocr-data-deu \
-        tesseract-ocr-data-fra \
-        font-bh-ttf \
-        libuuid && \
-        ln -s /usr/lib/libfontconfig.so.1 /usr/lib/libfontconfig.so && \
-        ln -s /lib/libuuid.so.1 /usr/lib/libuuid.so.1 && \
-        ln -s /lib/libc.musl-x86_64.so.1 /usr/lib/libc.musl-x86_64.so.1
-ENV LD_LIBRARY_PATH /usr/lib
-CMD ["sh", "-c", "/audiveris-extract/bin/Audiveris -batch -export -output /output/jpg /input/*.jpg"]
-CMD ["sh", "-c", "/audiveris-extract/bin/Audiveris -batch -export -output /output/png /input/*.png"]
-CMD ["sh", "-c", "/audiveris-extract/bin/Audiveris -batch -export -output /output/pdf /input/*.pdf"]
+CMD ["sh", "-c", "/audiveris-extract/bin/Audiveris -batch -export -output /output/ $(ls /input/*.jpg /input/*.png /input/*.pdf)"]

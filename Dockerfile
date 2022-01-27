@@ -1,8 +1,10 @@
-FROM debian:stretch
+FROM debian:stretch-slim
 
 RUN apt-get update && apt-get install -y  \
-        curl wget \
-        git tesseract-ocr \
+        curl \
+        wget \
+        git \
+        tesseract-ocr \
         tesseract-ocr-eng \
         tesseract-ocr-deu \
         tesseract-ocr-fra
@@ -19,6 +21,7 @@ RUN  git clone --branch development https://github.com/Audiveris/audiveris.git &
         ./gradlew build && \
         mkdir /audiveris-extract && \
         tar -xvf /audiveris/build/distributions/Audiveris*.tar -C /audiveris-extract && \
-        mv /audiveris-extract/Audiveris*/* /audiveris-extract/
+        mv /audiveris-extract/Audiveris*/* /audiveris-extract/ &&\
+        rm -r /audiveris
 
 CMD ["sh", "-c", "/audiveris-extract/bin/Audiveris -batch -export -output /output/ $(ls /input/*.jpg /input/*.png /input/*.pdf)"]
